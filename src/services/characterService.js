@@ -1,4 +1,5 @@
 import { characterModel } from '../models/character.js';
+import { equipmentModel } from '../models/equipment.js';
 
 export const characterService = {
   list() {
@@ -47,5 +48,7 @@ export const characterService = {
       error.status = 404;
       throw error;
     }
+
+    equipmentModel.removeByCharacter(id);
   },
 };

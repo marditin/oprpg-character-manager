@@ -1,0 +1,7 @@
+body {
+  min-height: 100vh;
+}
+
+.list-group-item {
+  transition: background-color 0.15s ease;
+}
