@@ -1,7 +1,106 @@
 body {
   min-height: 100vh;
+  margin: 0;
+  background: #05080f;
+  color: #f2f2f2;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(5, 8, 15, 0.88), rgba(5, 8, 15, 0.88)),
+    url("../assets/ordo-logo.png") center center / 520px no-repeat;
+  opacity: 0.35;
+  z-index: -1;
+}
+
+.container {
+  max-width: 1200px;
+  padding-top: 2rem;
+}
+
+header h1 {
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(127, 181, 255, 0.25);
+}
+
+header p {
+  color: #cfd8e3 !important;
+  border-left: 3px solid #4a7fc7;
+  padding-left: 12px;
+  margin-top: 10px;
+}
+
+.card {
+  background-color: rgba(15, 20, 28, 0.95);
+  border: 1px solid #2f4f7a;
+  box-shadow: 0 0 15px rgba(70, 130, 180, 0.12);
+}
+
+.card-header {
+  background-color: #142338 !important;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #2f4f7a;
+}
+
+.form-control,
+.form-select {
+  background-color: #0f141c;
+  color: #f2f2f2;
+  border: 1px solid #2f4f7a;
+}
+
+.form-control::placeholder {
+  color: #8ca0bd;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: #0f141c;
+  color: white;
+  border-color: #7fb5ff;
+  box-shadow: 0 0 0 0.2rem rgba(127, 181, 255, 0.2);
 }
 
 .list-group-item {
-  transition: background-color 0.15s ease;
+  background-color: #10161f;
+  color: #f2f2f2;
+  border-color: #2f4f7a;
+}
+
+.btn-dark,
+.btn-secondary {
+  background-color: #1f4d7a;
+  border-color: #1f4d7a;
+}
+
+.btn-dark:hover,
+.btn-secondary:hover {
+  background-color: #2f6cab;
+  border-color: #2f6cab;
+}
+
+.btn-danger {
+  background-color: #8b1e1e;
+  border-color: #8b1e1e;
+}
+
+.btn-danger:hover {
+  background-color: #b32727;
+  border-color: #b32727;
+}
+
+.alert-danger {
+  background-color: #2a0f0f;
+  border-color: #8f2020;
+  color: #ffb3b3;
 }
