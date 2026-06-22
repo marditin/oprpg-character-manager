@@ -47,4 +47,10 @@ export const equipmentModel = {
 
     return equipments.length < lengthBefore;
   },
+
+  removeByCharacter(characterId) {
+    equipments = equipments.filter(
+      equipment => equipment.characterId !== characterId
+    );
+  }
 };
