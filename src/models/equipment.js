@@ -1,56 +1,82 @@
-let equipments = [];
-let nextId = 1;
+import { db } from '../db.js';
+
+function toApi(row) {
+  if (!row) return null;
+
+  return {
+    id: row.id,
+    name: row.name,
+    category: row.category,
+    description: row.description,
+    characterId: row.character_id,
+  };
+}
 
 export const equipmentModel = {
   list() {
-    return equipments;
+    return db.prepare('SELECT * FROM equipments').all().map(toApi);
   },
 
   listByCharacter(characterId) {
-    return equipments.filter(equipment => equipment.characterId === characterId);
+    return db
+      .prepare('SELECT * FROM equipments WHERE character_id = ?')
+      .all(Number(characterId))
+      .map(toApi);
   },
 
   findById(id) {
-    return equipments.find(equipment => equipment.id === id) || null;
+    return toApi(
+      db.prepare('SELECT * FROM equipments WHERE id = ?').get(Number(id))
+    );
   },
 
   create({ name, category, description, characterId }) {
-    const equipment = {
-      id: nextId++,
-      name,
-      category,
-      description,
-      characterId: Number(characterId),
-    };
+    const result = db
+      .prepare(
+        `INSERT INTO equipments (name, category, description, character_id)
+         VALUES (?, ?, ?, ?)`
+      )
+      .run(name, category, description || '', Number(characterId));
 
-    equipments.push(equipment);
-    return equipment;
+    return this.findById(result.lastInsertRowid);
   },
 
   update(id, data) {
-    const index = equipments.findIndex(equipment => equipment.id === id);
+    const current = this.findById(id);
+    if (!current) return null;
 
-    if (index === -1) return null;
-
-    equipments[index] = {
-      ...equipments[index],
+    const updated = {
+      ...current,
       ...data,
-      id,
+      id: Number(id),
     };
 
-    return equipments[index];
+    db.prepare(
+      `UPDATE equipments
+       SET name = ?, category = ?, description = ?, character_id = ?
+       WHERE id = ?`
+    ).run(
+      updated.name,
+      updated.category,
+      updated.description || '',
+      Number(updated.characterId),
+      Number(id)
+    );
+
+    return this.findById(id);
   },
 
   remove(id) {
-    const lengthBefore = equipments.length;
-    equipments = equipments.filter(equipment => equipment.id !== id);
+    const result = db
+      .prepare('DELETE FROM equipments WHERE id = ?')
+      .run(Number(id));
 
-    return equipments.length < lengthBefore;
+    return result.changes > 0;
   },
 
   removeByCharacter(characterId) {
-    equipments = equipments.filter(
-      equipment => equipment.characterId !== characterId
+    db.prepare('DELETE FROM equipments WHERE character_id = ?').run(
+      Number(characterId)
     );
-  }
+  },
 };
