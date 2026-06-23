@@ -1,0 +1,29 @@
+{
+  "name": "oprpg-fichas",
+  "version": "1.0.0",
+  "description": "Sistema web fullstack para gerenciamento de fichas de personagens de Ordem Paranormal RPG",
+  "main": "src/server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marditin/oprpg-character-manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/marditin/oprpg-character-manager/issues"
+  },
+  "homepage": "https://github.com/marditin/oprpg-character-manager#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}
