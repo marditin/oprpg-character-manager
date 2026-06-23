@@ -1,46 +1,69 @@
-let characters = [];
-let nextId = 1;
+import { db } from '../db.js';
+
+function toApi(row) {
+  if (!row) return null;
+
+  return {
+    id: row.id,
+    name: row.name,
+    nex: row.nex,
+    origin: row.origin,
+    characterClass: row.character_class,
+  };
+}
 
 export const characterModel = {
   list() {
-    return characters;
+    return db.prepare('SELECT * FROM characters').all().map(toApi);
   },
 
   findById(id) {
-    return characters.find(character => character.id === id) || null;
+    return toApi(
+      db.prepare('SELECT * FROM characters WHERE id = ?').get(Number(id))
+    );
   },
 
   create({ name, nex, origin, characterClass }) {
-    const character = {
-      id: nextId++,
-      name,
-      nex,
-      origin,
-      characterClass,
-    };
+    const result = db
+      .prepare(
+        `INSERT INTO characters (name, nex, origin, character_class)
+         VALUES (?, ?, ?, ?)`
+      )
+      .run(name, Number(nex), origin, characterClass);
 
-    characters.push(character);
-    return character;
+    return this.findById(result.lastInsertRowid);
   },
 
   update(id, data) {
-    const index = characters.findIndex(character => character.id === id);
+    const current = this.findById(id);
+    if (!current) return null;
 
-    if (index === -1) return null;
-
-    characters[index] = {
-      ...characters[index],
+    const updated = {
+      ...current,
       ...data,
-      id,
+      id: Number(id),
     };
 
-    return characters[index];
+    db.prepare(
+      `UPDATE characters
+       SET name = ?, nex = ?, origin = ?, character_class = ?
+       WHERE id = ?`
+    ).run(
+      updated.name,
+      Number(updated.nex),
+      updated.origin,
+      updated.characterClass,
+      Number(id)
+    );
+
+    return this.findById(id);
   },
 
   remove(id) {
-    const lengthBefore = characters.length;
-    characters = characters.filter(character => character.id !== id);
+    const result = db
+      .prepare('DELETE FROM characters WHERE id = ?')
+      .run(Number(id));
 
-    return characters.length < lengthBefore;
+    return result.changes > 0;
   },
 };
