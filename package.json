@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Sistema web fullstack para gerenciamento de fichas de personagens de Ordem Paranormal RPG",
   "main": "src/server.js",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "directories": {
     "doc": "docs"
   },
